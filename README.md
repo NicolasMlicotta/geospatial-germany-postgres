@@ -23,7 +23,7 @@ All spatial layers referenced by the SQL queries originate from DIVA-GIS (https:
 
 Additionally, a city-level population dataset (cities with population > 1,000) was sourced from OpenDataSoft (https://public.opendatasoft.com/). This CSV provides each city’s name, population, and geographic coordinates, which are used to calculate population aggregates by state and district.
 
-Examples:
+**Examples:**
 
 ![image](https://github.com/user-attachments/assets/a4149f50-b818-4713-9b85-09a65bc38e98)
 
