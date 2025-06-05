@@ -61,4 +61,57 @@ CREATE OR REPLACE VIEW pregunta_5 AS
 SELECT 
   s."NAME_1" AS state,
   SUM(ST_Length(ST_Transform(r.geom, 25832))) / 1000 AS km
-FROM road
+FROM roads r
+JOIN states s ON ST_Contains(s.geom, r.geom)
+GROUP BY s."NAME_1"
+ORDER BY km DESC;
+
+-- 6) Which districts have the greatest length of railway lines?
+CREATE OR REPLACE VIEW pregunta_6 AS 
+SELECT 
+  d."NAME_3" AS district,
+  SUM(ST_Length(ST_Transform(r.geom, 25832))) / 1000 AS km
+FROM rails r
+LEFT JOIN districts d ON ST_Intersects(d.geom, r.geom)
+GROUP BY d."NAME_3"
+ORDER BY km DESC;
+
+-- 7) Which districts have the greatest length of roads?
+CREATE OR REPLACE VIEW pregunta_7 AS
+SELECT 
+  d."NAME_3" AS district,
+  SUM(ST_Length(ST_Transform(r.geom, 25832))) / 1000 AS km
+FROM roads r
+JOIN districts d ON ST_Intersects(d.geom, r.geom)
+GROUP BY d."NAME_3"
+ORDER BY km DESC;
+
+-- 8) How many kilometers of rivers and streams does Germany have?
+CREATE OR REPLACE VIEW pregunta_8 AS
+SELECT
+  c."NAME_0" AS country,
+  SUM(ST_Length(ST_Transform(w.geom, 25832))) / 1000 AS km_water_lines
+FROM water_lines w
+JOIN country c ON ST_Contains(c.geom, w.geom)
+WHERE c."NAME_0" = 'Germany'
+GROUP BY c."NAME_0";
+
+-- 9) Which districts have the greatest length of rivers and streams?
+CREATE OR REPLACE VIEW pregunta_9 AS
+SELECT 
+  d."NAME_3" AS district,
+  SUM(ST_Length(ST_Transform(w.geom, 25832))) / 1000 AS km_water_lines
+FROM water_lines w
+LEFT JOIN districts d ON ST_Intersects(d.geom, w.geom)
+GROUP BY d."NAME_3"
+ORDER BY km_water_lines DESC;
+
+-- 10) Which states have the greatest length of rivers and streams?
+CREATE OR REPLACE VIEW pregunta_10 AS
+SELECT 
+  s."NAME_1" AS state,
+  SUM(ST_Length(ST_Transform(w.geom, 25832))) / 1000 AS km_water_lines
+FROM water_lines w
+JOIN states s ON ST_Contains(s.geom, w.geom)
+GROUP BY s."NAME_1"
+ORDER BY km_water_lines DESC;
